@@ -10,12 +10,14 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.bmi_calculator_app.R
+import com.example.bmi_calculator_app.ui.dashboard.HistoryViewModel
 import com.example.bmi_calculator_app.viewmodel.SharedViewModel
 import kotlin.math.pow
 
 class HomeFragment : Fragment() {
 
     private val sharedViewModel: SharedViewModel by activityViewModels()
+    private val historyViewModel: HistoryViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,6 +43,7 @@ class HomeFragment : Fragment() {
 
                 val bmiCategory = getBMICategory(bmi)
                 sharedViewModel.setBmiCategory(bmiCategory)
+                addHistoryEntry(bmi)
 
                 resultTextView.text = getString(R.string.bmi_result, bmi, bmiCategory)
             } else {
@@ -62,5 +65,11 @@ class HomeFragment : Fragment() {
             bmi in 25.0..29.9 -> "Overweight"
             else -> "Obese"
         }
+    }
+
+    private fun addHistoryEntry(bmi: Double) {
+        val weight = sharedViewModel.weight.value ?: 0.0
+        val height = sharedViewModel.height.value ?: 0.0
+        historyViewModel.addHistoryEntry(weight.toFloat(), height.toFloat(), bmi.toFloat(), sharedViewModel.bmiCategory.value ?: "Unknown")
     }
 }

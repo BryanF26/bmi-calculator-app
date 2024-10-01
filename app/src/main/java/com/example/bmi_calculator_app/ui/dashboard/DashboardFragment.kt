@@ -40,7 +40,7 @@ class DashboardFragment : Fragment() {
         // Observing BMI result
         sharedViewModel.bmiResult.observe(viewLifecycleOwner) { bmi ->
             bmiTextView.text = getString(R.string.bmi_display, bmi)
-            addHistoryEntry(bmi) // Call to add history when BMI is updated
+//            addHistoryEntry(bmi) // Call to add history when BMI is updated
         }
 
         // Observing BMI category
@@ -51,9 +51,9 @@ class DashboardFragment : Fragment() {
         return rootView
     }
 
-    private fun addHistoryEntry(bmi: Double) {
-        val weight = sharedViewModel.weight.value ?: 0.0
-        val height = sharedViewModel.height.value ?: 0.0
-        historyViewModel.addHistoryEntry(weight.toFloat(), height.toFloat(), bmi.toFloat(), sharedViewModel.bmiCategory.value ?: "Unknown")
-    }
+//    private fun addHistoryEntry(bmi: Double) {
+//        val weight = sharedViewModel.weight.value ?: 0.0
+//        val height = sharedViewModel.height.value ?: 0.0
+//        historyViewModel.addHistoryEntry(weight.toFloat(), height.toFloat(), bmi.toFloat(), sharedViewModel.bmiCategory.value ?: "Unknown")
+//    }
 }
