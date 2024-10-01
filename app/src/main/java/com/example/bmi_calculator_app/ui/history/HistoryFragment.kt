@@ -1,21 +1,21 @@
 package com.example.bmi_calculator_app.ui.history
 
-import HistoryViewModel
+import HistoryAdapter
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bmi_calculator_app.R
+import com.example.bmi_calculator_app.ui.dashboard.HistoryViewModel
 
 class HistoryFragment : Fragment() {
 
-    private lateinit var viewModel: HistoryViewModel
-    private lateinit var historyAdapter: HistoryAdapter
-    private lateinit var recyclerView: RecyclerView
+    private val historyViewModel: HistoryViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,18 +27,17 @@ class HistoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Initialize RecyclerView
-        recyclerView = view.findViewById(R.id.recyclerViewHistory)
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        val recyclerView = view.findViewById<RecyclerView>(R.id.history_recycler_view)
+        recyclerView.layoutManager = LinearLayoutManager(context)
 
-        // Set up ViewModel
-        viewModel = ViewModelProvider(this).get(HistoryViewModel::class.java)
+        val adapter = HistoryAdapter()
+        recyclerView.adapter = adapter
 
-        // Observe the LiveData from ViewModel
-        viewModel.currencyRateHistory.observe(viewLifecycleOwner, { historyList ->
-            // Initialize the adapter with data when available
-            historyAdapter = HistoryAdapter(historyList)
-            recyclerView.adapter = historyAdapter
-        })
+        historyViewModel.history.observe(viewLifecycleOwner) { history ->
+            Log.d("HistoryFragment", "History size: ${history.size}") // Log the size of the history list
+            adapter.submitList(history)
+        }
     }
+
+
 }

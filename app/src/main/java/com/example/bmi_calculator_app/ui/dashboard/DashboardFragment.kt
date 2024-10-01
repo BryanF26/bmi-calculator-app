@@ -14,6 +14,7 @@ import com.example.bmi_calculator_app.viewmodel.SharedViewModel
 class DashboardFragment : Fragment() {
 
     private val sharedViewModel: SharedViewModel by activityViewModels()
+    private val historyViewModel: HistoryViewModel by activityViewModels()
 
     @SuppressLint("StringFormatInvalid")
     override fun onCreateView(
@@ -26,22 +27,33 @@ class DashboardFragment : Fragment() {
         val weightTextView = rootView.findViewById<TextView>(R.id.weight_result)
         val heightTextView = rootView.findViewById<TextView>(R.id.height_result)
 
-
+        // Observing weight
         sharedViewModel.weight.observe(viewLifecycleOwner) { weight ->
             weightTextView.text = getString(R.string.weight_display, weight)
         }
 
+        // Observing height
         sharedViewModel.height.observe(viewLifecycleOwner) { height ->
             heightTextView.text = getString(R.string.height_display, height)
         }
 
+        // Observing BMI result
         sharedViewModel.bmiResult.observe(viewLifecycleOwner) { bmi ->
             bmiTextView.text = getString(R.string.bmi_display, bmi)
+//            addHistoryEntry(bmi) // Call to add history when BMI is updated
         }
+
+        // Observing BMI category
         sharedViewModel.bmiCategory.observe(viewLifecycleOwner) { bmiCategory ->
-            categoryTextView.text = getString(R.string.bmi_category_display,bmiCategory )
+            categoryTextView.text = getString(R.string.bmi_category_display, bmiCategory)
         }
 
         return rootView
     }
+
+//    private fun addHistoryEntry(bmi: Double) {
+//        val weight = sharedViewModel.weight.value ?: 0.0
+//        val height = sharedViewModel.height.value ?: 0.0
+//        historyViewModel.addHistoryEntry(weight.toFloat(), height.toFloat(), bmi.toFloat(), sharedViewModel.bmiCategory.value ?: "Unknown")
+//    }
 }
