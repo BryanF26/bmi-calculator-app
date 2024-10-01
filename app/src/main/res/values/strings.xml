@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">bmi-calculator-app</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_home">BMI Calculator</string>
+    <string name="title_dashboard">Calculation Result</string>
+    <string name="title_notifications">History</string>
+    <string name="invalid_input">Please enter valid values for weight and height.</string>
+    <string name="bmi_result">Your BMI is %.2f. You are %s.</string>
+    <string name="bmi_display">%.2f</string>
+    <string name="bmi_category_display">%s</string>}
+    <string name="weight_display">%.2f kg</string>
+    <string name="height_display">%.2f m</string>}
 </resources>

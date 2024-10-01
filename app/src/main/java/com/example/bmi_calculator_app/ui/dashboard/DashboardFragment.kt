@@ -1,42 +1,47 @@
 package com.example.bmi_calculator_app.ui.dashboard
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.example.bmi_calculator_app.databinding.FragmentDashboardBinding
+import androidx.fragment.app.activityViewModels
+import com.example.bmi_calculator_app.R
+import com.example.bmi_calculator_app.viewmodel.SharedViewModel
 
 class DashboardFragment : Fragment() {
 
-    private var _binding: FragmentDashboardBinding? = null
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
-
+    @SuppressLint("StringFormatInvalid")
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        val dashboardViewModel =
-            ViewModelProvider(this).get(DashboardViewModel::class.java)
+    ): View? {
+        val rootView = inflater.inflate(R.layout.fragment_dashboard, container, false)
+        val bmiTextView = rootView.findViewById<TextView>(R.id.bmi_result)
+        val categoryTextView = rootView.findViewById<TextView>(R.id.bmi_category)
+        val weightTextView = rootView.findViewById<TextView>(R.id.weight_result)
+        val heightTextView = rootView.findViewById<TextView>(R.id.height_result)
 
-        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
-        val root: View = binding.root
 
-        val textView: TextView = binding.textDashboard
-        dashboardViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+        sharedViewModel.weight.observe(viewLifecycleOwner) { weight ->
+            weightTextView.text = getString(R.string.weight_display, weight)
         }
-        return root
-    }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+        sharedViewModel.height.observe(viewLifecycleOwner) { height ->
+            heightTextView.text = getString(R.string.height_display, height)
+        }
+
+        sharedViewModel.bmiResult.observe(viewLifecycleOwner) { bmi ->
+            bmiTextView.text = getString(R.string.bmi_display, bmi)
+        }
+        sharedViewModel.bmiCategory.observe(viewLifecycleOwner) { bmiCategory ->
+            categoryTextView.text = getString(R.string.bmi_category_display,bmiCategory )
+        }
+
+        return rootView
     }
 }

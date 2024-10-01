@@ -4,39 +4,63 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.example.bmi_calculator_app.databinding.FragmentHomeBinding
+import androidx.fragment.app.activityViewModels
+import com.example.bmi_calculator_app.R
+import com.example.bmi_calculator_app.viewmodel.SharedViewModel
+import kotlin.math.pow
 
 class HomeFragment : Fragment() {
 
-    private var _binding: FragmentHomeBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+    ): View? {
+        val rootView = inflater.inflate(R.layout.fragment_home, container, false)
 
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        val weightInput = rootView.findViewById<EditText>(R.id.weight)
+        val heightInput = rootView.findViewById<EditText>(R.id.height)
+        val calculateButton = rootView.findViewById<Button>(R.id.btn_calculate)
+        val resultTextView = rootView.findViewById<TextView>(R.id.result)
 
-        val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+        calculateButton.setOnClickListener {
+            val weight = weightInput.text.toString().toDoubleOrNull()
+            val height = heightInput.text.toString().toDoubleOrNull()
+
+            if (weight != null && height != null && height > 0) {
+                sharedViewModel.setWeight(weight)
+                sharedViewModel.setHeight(height)
+
+                val bmi = calculateBMI(weight, height)
+                sharedViewModel.setBmiResult(bmi)
+
+                val bmiCategory = getBMICategory(bmi)
+                sharedViewModel.setBmiCategory(bmiCategory)
+
+                resultTextView.text = getString(R.string.bmi_result, bmi, bmiCategory)
+            } else {
+                resultTextView.text = getString(R.string.invalid_input)
+            }
         }
-        return root
+
+        return rootView
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun calculateBMI(weight: Double, height: Double): Double {
+        return weight / height.pow(2)
+    }
+
+    private fun getBMICategory(bmi: Double): String {
+        return when {
+            bmi < 18.5 -> "Underweight"
+            bmi in 18.5..24.9 -> "Normal weight"
+            bmi in 25.0..29.9 -> "Overweight"
+            else -> "Obese"
+        }
     }
 }
