@@ -14,6 +14,7 @@ import com.example.bmi_calculator_app.viewmodel.SharedViewModel
 class DashboardFragment : Fragment() {
 
     private val sharedViewModel: SharedViewModel by activityViewModels()
+    private val historyViewModel: HistoryViewModel by activityViewModels()
 
     @SuppressLint("StringFormatInvalid")
     override fun onCreateView(
@@ -38,9 +39,17 @@ class DashboardFragment : Fragment() {
         sharedViewModel.bmiResult.observe(viewLifecycleOwner) { bmi ->
             bmiTextView.text = getString(R.string.bmi_display, bmi)
         }
+
+
+
         sharedViewModel.bmiCategory.observe(viewLifecycleOwner) { bmiCategory ->
             categoryTextView.text = getString(R.string.bmi_category_display,bmiCategory )
         }
+
+        val weight = sharedViewModel.weight.value ?: 0.0
+        val height = sharedViewModel.height.value ?: 0.0
+
+        historyViewModel.addHistoryEntry(weight.toFloat(), height.toFloat(), bmi.toFloat(), sharedViewModel.bmiCategory.value ?: "Unknown")
 
         return rootView
     }
