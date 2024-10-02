@@ -34,7 +34,7 @@ class HistoryFragment : Fragment() {
         recyclerView.adapter = adapter
 
         historyViewModel.history.observe(viewLifecycleOwner) { history ->
-            Log.d("HistoryFragment", "History size: ${history.size}") // Log the size of the history list
+            Log.d("HistoryFragment", "History size: ${history.size}")
             adapter.submitList(history)
         }
     }

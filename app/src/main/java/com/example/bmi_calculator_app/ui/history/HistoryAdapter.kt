@@ -23,10 +23,10 @@ class HistoryAdapter(private var historyList: List<HistoryEntry> = emptyList()) 
 
     override fun onBindViewHolder(holder: HistoryViewHolder, position: Int) {
         val item = historyList[position]
-        holder.weightText.text = "Weight: ${item.weight} kg"
-        holder.heightText.text = "Height: ${item.height} cm"
-        holder.bmiText.text = "BMI: ${item.bmi}"
-        holder.categoryText.text = "Category: ${item.category}"
+        holder.weightText.text = "${item.weight} kg"
+        holder.heightText.text = "${item.height} cm"
+        holder.bmiText.text = String.format("%.2f", item.bmi)
+        holder.categoryText.text = "${item.category}"
     }
 
     override fun getItemCount(): Int = historyList.size
