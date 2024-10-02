@@ -1,5 +1,6 @@
 package com.example.bmi_calculator_app.ui.home
 
+import androidx.navigation.fragment.findNavController
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.bmi_calculator_app.R
+import com.example.bmi_calculator_app.ui.dashboard.DashboardFragment
 import com.example.bmi_calculator_app.ui.dashboard.HistoryViewModel
 import com.example.bmi_calculator_app.viewmodel.SharedViewModel
 import kotlin.math.pow
@@ -51,6 +53,9 @@ class HomeFragment : Fragment() {
 
                 Toast.makeText(requireContext(), "Calculate Successfully!", Toast.LENGTH_SHORT).show()
                 resultTextView.text = getString(R.string.bmi_result, bmi, bmiCategory)
+
+                findNavController().navigate(R.id.navigation_dashboard)
+
             } else {
                 resultTextView.text = getString(R.string.invalid_input)
             }
