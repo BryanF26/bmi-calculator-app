@@ -46,6 +46,9 @@ class HomeFragment : Fragment() {
                 sharedViewModel.setBmiCategory(bmiCategory)
                 addHistoryEntry(bmi)
 
+                weightInput.setText("")
+                heightInput.setText("")
+
                 Toast.makeText(requireContext(), "Calculate Successfully!", Toast.LENGTH_SHORT).show()
                 resultTextView.text = getString(R.string.bmi_result, bmi, bmiCategory)
             } else {
